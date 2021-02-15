@@ -38,12 +38,14 @@ int main(int argc, char* args[]) {
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderClear(renderer);
   SDL_Color colour = {0, 0, 0};
   SDL_Surface *surface = TTF_RenderText_Solid(font, text, colour);
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_QueryTexture(texture, NULL, NULL, &width, &height);  
   SDL_Rect rect = {10, 10, width, height};
+  SDL_RenderClear(renderer);
+  SDL_RenderCopy(renderer, texture, NULL, &rect);
+  SDL_RenderPresent(renderer);
   SDL_RaiseWindow(window);
 
   printf("Start event loop.\n"); fflush(stdout);
@@ -55,6 +57,7 @@ int main(int argc, char* args[]) {
       printf("Event type SDL_QUIT occurred.\n"); fflush(stdout);
       break;
     }
+    SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     SDL_RenderPresent(renderer);
   }
